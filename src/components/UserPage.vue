@@ -22,19 +22,28 @@
     <div class="profile-container">
       <!-- User Info -->
       <div class="user-info-card">
-        <img class="avatar" src="https://via.placeholder.com/80" alt="User Avatar" />
+        <img class="user-icon" src="@/assets/user.png" alt="User Icon" />
         <div class="user-details">
-          <h2>Gwen Stacy</h2>
-          <p>gwenstacy@example.com</p>
-          <span class="badge">Nursing</span>
+          <h2 class="user-name">Gwen Stacy</h2>
+          <p class="user-email">gwenstacy@example.com</p>
         </div>
         <div class="user-meta">
-          <p><strong>Joined:</strong> April 15 2025</p>
-          <p><strong>Current Streak:</strong> 9 days</p>
-          <div class="goals">
-            <span class="goal">20 tests a day</span>
-            <span class="goal">100 day streak</span>
-            <span class="goal">Level 20</span>
+          <!-- Joined + Streak on same line -->
+          <div class="meta-row">
+            <p><strong>Joined:</strong> April 15 2025</p>
+            <p><strong>Current Streak:</strong> 9 days</p>
+          </div>
+
+          <!-- Progress circle + bar on same line -->
+          <div class="progress-row">
+            <div class="progress-circle-large">
+              <span class="progress-number">5</span>
+            </div>
+            <div class="progress-bar-container">
+              <div class="progress-bar">
+                <div class="progress-fill" :style="{ width: progress + '%' }"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -114,11 +123,11 @@
         </div>
       </div>
 
-  <!-- Typing History Graph -->
-<div class="chart-card">
-  <h3>Typing History</h3>
-  <Line :data="chartData" :options="chartOptions" />
-</div>
+      <!-- Typing History Graph -->
+      <div class="chart-card">
+        <h3>Typing History</h3>
+        <Line :data="chartData" :options="chartOptions" />
+      </div>
 
       <!-- Test History Table -->
       <div class="table-card">
@@ -170,6 +179,7 @@ export default {
   components: { Line },
   data() {
     return {
+      progress: 75, // progress bar %
       chartData: {
         labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         datasets: [
@@ -278,38 +288,77 @@ export default {
   display: flex;
   gap: 20px;
   align-items: center;
+  width: 100%;
 }
-.avatar {
+.user-icon {
   width: 80px;
   height: 80px;
-  border-radius: 50%;
+  object-fit: contain;
 }
-.user-details h2 {
-  margin: 0;
-  font-size: 20px;
-}
-.badge {
-  display: inline-block;
-  background: #004aad;
-  color: white;
-  padding: 3px 8px;
-  border-radius: 5px;
-  font-size: 12px;
-}
-.user-meta {
-  margin-left: auto;
-  text-align: right;
-}
-.goals {
+.user-details {
   display: flex;
-  gap: 8px;
+  flex-direction: column;
+  justify-content: center;
 }
-.goal {
-  background: #f0f4ff;
-  border: 1px solid #004aad;
-  padding: 4px 10px;
-  border-radius: 5px;
-  font-size: 12px;
+.user-details .user-name {
+  margin: 0;
+  font-size: 28px;
+  font-weight: bold;
+}
+.user-details .user-email {
+  margin: 5px 0 0;
+  color: #555;
+  font-size: 16px;
+}
+
+/* User Meta */
+.user-meta {
+  margin-left: 40px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex: 1;
+}
+.meta-row {
+  display: flex;
+  justify-content:first baseline;
+  gap: 50px;
+  width: 100%;
+}
+.progress-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+}
+.progress-circle-large {
+  width: 30px;
+  height: 30px;
+  background-color: #004aad;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+}
+.progress-bar-container {
+  flex: 1;
+  display: flex;
+}
+.progress-bar {
+  flex: 1;
+  height: 12px;
+  background: #eee;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: #004aad;
+  border-radius: 10px;
 }
 
 /* Stats */

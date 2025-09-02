@@ -1,546 +1,851 @@
-<template>
-  <div class="app-container">
-    <!-- Top Bar (DO NOT CHANGE) -->
-    <header class="top-bar">
-      <div class="left-section">
-        <span class="logo" @click="goToLoggedIn">NurseScripts</span>
-      </div>
-      <div class="right-section">
-        <span class="username" @click="goToUserPage">{{ username }}</span>
-        <div class="progress-circle">
-          <span class="progress-number">5</span>
-        </div>
-        <img
-          src="@/assets/settings.png"
-          alt="Settings"
-          class="icon-img"
-          @click="goToSettings"
-        />
-        <img
-          src="@/assets/highscore.png"
-          alt="Highscore"
-          class="icon-img"
-          @click="goToHighscore"
-        />
-        <img
-          src="@/assets/about.png"
-          alt="About"
-          class="icon-img"
-          @click="goToAbout"
-        />
-      </div>
-    </header>
+<template> 
+  <div class="app-container"> 
+    <!-- Top Bar (DO NOT CHANGE) --> 
+    <header class="top-bar"> 
+      <div class="left-section"> 
+        <span class="logo" @click="goToLoggedIn">NurseScripts</span> 
+      </div> 
+      <div class="right-section"> 
+        <span class="username" @click="goToUserPage">{{ username }}</span> 
+        <div class="progress-circle"> 
+          <span class="progress-number">5</span> 
+        </div> 
+        <img 
+          src="@/assets/settings.png" 
+          alt="Settings" 
+          class="icon-img" 
+          @click="goToSettings" 
+        /> 
+        <img 
+          src="@/assets/highscore.png" 
+          alt="Highscore" 
+          class="icon-img" 
+          @click="goToHighscore" 
+        /> 
+        <img 
+          src="@/assets/about.png" 
+          alt="About" 
+          class="icon-img" 
+          @click="goToAbout" 
+        /> 
+      </div> 
+    </header> 
 
-    <!-- Customize Content -->
-    <div class="customize-shell">
-      <!-- Keys to include -->
-      <section class="group">
-        <div class="group-title">keys to include</div>
-        <div class="group-row">
-          <button
-            class="pill"
-            :class="{ active: keys.numbers }"
-            @click="toggleKey('numbers')"
-          >
-            numbers
-          </button>
-          <button
-            class="pill"
-            :class="{ active: keys.punctuation }"
-            @click="toggleKey('punctuation')"
-          >
-            punctuation
-          </button>
-        </div>
-      </section>
+    <!-- Customize Content --> 
+    <div class="customize-shell"> 
+      <!-- Close Button --> 
+      <button class="close-btn" @click="goToLoggedIn">×</button> 
 
-      <!-- Mode -->
-      <section class="group">
-        <div class="group-title">Mode</div>
-        <div class="group-row wrap">
-          <button
-            class="pill"
-            :class="{ active: mode === 'words' }"
-            @click="selectMode('words')"
-          >
-            words
-          </button>
+      <!-- Keys to include --> 
+      <section class="group"> 
+        <div class="group-title">keys to include</div> 
+        <div class="group-row"> 
+          <button 
+            class="pill" 
+            :class="{ active: keys.numbers }" 
+            :disabled="disableKeys" 
+            @click="toggleKey('numbers')" 
+          > 
+            Numbers 
+          </button> 
+          <button 
+            class="pill" 
+            :class="{ active: keys.punctuation }" 
+            :disabled="disableKeys" 
+            @click="toggleKey('punctuation')" 
+          > 
+            Punctuation 
+          </button> 
+        </div> 
+      </section> 
 
-          <button
-            class="pill"
-            :class="{ active: mode === 'time' }"
-            @click="selectMode('time')"
-          >
-            time
-          </button>
+      <!-- Mode --> 
+      <section class="group"> 
+        <div class="group-title">Mode</div> 
+        <div class="group-row wrap"> 
+          <button 
+            class="pill" 
+            :class="{ active: mode === 'words' }" 
+            @click="selectMode('words')" 
+          > 
+            Words 
+          </button> 
 
-          <!-- Clinical scenarios -->
-          <div class="dropdown-wrapper">
-            <button
-              class="pill with-caret"
-              :class="{ active: mode === 'clinical' }"
-              @click="toggleDropdown('clinical')"
-            >
-              clinical scenarios
-              <span class="caret">▾</span>
-            </button>
-            <div
-              v-if="showClinical"
-              class="dropdown"
-              @mouseleave="showClinical = false"
-            >
-              <div
-                v-for="opt in clinicalOptions"
-                :key="opt"
-                class="dropdown-item"
-                :class="{ selected: selectedClinical === opt }"
-                @click="selectClinical(opt)"
-              >
-                {{ opt }}
-              </div>
-            </div>
-          </div>
+          <button 
+            class="pill" 
+            :class="{ active: mode === 'time' }" 
+            @click="selectMode('time')" 
+          > 
+            Time 
+          </button> 
 
-          <!-- Body system -->
-          <div class="dropdown-wrapper">
-            <button
-              class="pill with-caret"
-              :class="{ active: mode === 'body' }"
-              @click="toggleDropdown('body')"
-            >
-              body-system
-              <span class="caret">▾</span>
-            </button>
-            <div
-              v-if="showBody"
-              class="dropdown"
-              @mouseleave="showBody = false"
-            >
-              <div
-                v-for="opt in bodySystemOptions"
-                :key="opt"
-                class="dropdown-item"
-                :class="{ selected: selectedBody === opt }"
-                @click="selectBody(opt)"
-              >
-                {{ opt }}
-              </div>
-            </div>
-          </div>
+          <!-- Clinical scenarios --> 
+          <div class="dropdown-wrapper"> 
+            <button 
+              class="pill with-caret" 
+              :class="{ active: mode === 'clinical' }" 
+              @click="toggleDropdown('clinical')" 
+            > 
+              {{ selectedClinical ? selectedClinical : 'Clinical scenarios' }} 
+              <span class="caret">▾</span> 
+            </button> 
+            <div 
+              v-if="showClinical" 
+              class="dropdown" 
+              @mouseleave="showClinical = false" 
+            > 
+              <div 
+                v-for="opt in clinicalOptions" 
+                :key="opt" 
+                class="dropdown-item" 
+                :class="{ selected: selectedClinical === opt }" 
+                @click="selectClinical(opt)" 
+              > 
+                {{ opt }} 
+              </div> 
+            </div> 
+          </div> 
 
-          <button
-            class="pill"
-            :class="{ active: mode === 'custom' }"
-            @click="selectMode('custom')"
-          >
-            custom
-          </button>
-        </div>
-      </section>
+          <!-- Body system --> 
+          <div class="dropdown-wrapper"> 
+            <button 
+              class="pill with-caret" 
+              :class="{ active: mode === 'body' }" 
+              @click="toggleDropdown('body')" 
+            > 
+              {{ selectedBody ? selectedBody : 'Body-system' }} 
+              <span class="caret">▾</span> 
+            </button> 
+            <div 
+              v-if="showBody" 
+              class="dropdown" 
+              @mouseleave="showBody = false" 
+            > 
+              <div 
+                v-for="opt in bodySystemOptions" 
+                :key="opt" 
+                class="dropdown-item" 
+                :class="{ selected: selectedBody === opt }" 
+                @click="selectBody(opt)" 
+              > 
+                {{ opt }} 
+              </div> 
+            </div> 
+          </div> 
 
-      <!-- Time -->
-      <section class="group">
-        <div class="group-title">Time</div>
-        <div class="group-row wrap">
-          <button
-            class="pill"
-            :class="{ active: timeSelection === 15 }"
-            @click="selectTime(15)"
-          >
-            15
-          </button>
-          <button
-            class="pill"
-            :class="{ active: timeSelection === 30 }"
-            @click="selectTime(30)"
-          >
-            30
-          </button>
-          <button
-            class="pill"
-            :class="{ active: timeSelection === 60 }"
-            @click="selectTime(60)"
-          >
-            60
-          </button>
-          <button
-            class="pill"
-            :class="{ active: timeSelection === 120 }"
-            @click="selectTime(120)"
-          >
-            120
-          </button>
+          <!-- Documentation --> 
+          <div class="dropdown-wrapper"> 
+            <button 
+              class="pill with-caret" 
+              :class="{ active: mode === 'documentation' }" 
+              @click="toggleDropdown('documentation')" 
+            > 
+              {{ selectedDocumentation ? selectedDocumentation : 'Documentation' }} 
+              <span class="caret">▾</span> 
+            </button> 
+            <div 
+              v-if="showDocumentation" 
+              class="dropdown" 
+              @mouseleave="showDocumentation = false" 
+            > 
+              <div 
+                v-for="opt in documentationOptions" 
+                :key="opt" 
+                class="dropdown-item" 
+                :class="{ selected: selectedDocumentation === opt }" 
+                @click="selectDocumentation(opt)" 
+              > 
+                {{ opt }} 
+              </div> 
+            </div> 
+          </div> 
+        </div> 
+      </section> 
 
-          <div class="custom-time">
-            <button
-              class="pill"
-              :class="{ active: timeSelection === 'custom' }"
-              @click="selectTime('custom')"
-            >
-              custom
-            </button>
-            <input
-              v-if="timeSelection === 'custom'"
-              class="custom-input"
-              type="number"
-              min="1"
-              placeholder="mins"
-              v-model.number="customMinutes"
-            />
-          </div>
-        </div>
-      </section>
+      <!-- number of words --> 
+      <section class="group"> 
+        <div class="group-title">number of words</div> 
+        <div class="group-row wrap"> 
+          <button 
+            class="pill" 
+            :class="{ active: wordsSelection === 15 }" 
+            :disabled="disableWordsGroup" 
+            @click="selectWords(15)" 
+          > 
+            15 
+          </button> 
+          <button 
+            class="pill" 
+            :class="{ active: wordsSelection === 30 }" 
+            :disabled="disableWordsGroup" 
+            @click="selectWords(30)" 
+          > 
+            30 
+          </button> 
 
-      <!-- Footer actions -->
-      <div class="footer-actions">
-        <button class="secondary-btn" @click="resetAll">reset</button>
-        <button class="primary-btn" @click="done">done</button>
-      </div>
-    </div>
-  </div>
-</template>
+          <button 
+            class="pill" 
+            :class="{ active: wordsSelection === 60 }" 
+            :disabled="disableWordsGroup" 
+            @click="selectWords(60)" 
+          > 
+            60 
+          </button> 
 
-<script>
-export default {
-  name: "CustomizePage",
-  data() {
-    return {
-      username: "GwenStacy",
+          <!-- Custom words input --> 
+          <div class="custom-time-wrapper"> 
+            <button 
+              class="pill" 
+              :class="{ active: wordsSelection === 'custom' }" 
+              :disabled="disableWordsGroup" 
+              @click="toggleWordsCustom" 
+            > 
+              custom 
+            </button> 
+            <input 
+              v-if="showWordsCustom" 
+              type="number" 
+              class="custom-input" 
+              v-model.number="wordsCustom" 
+              placeholder=" " 
+              min="61" 
+              :disabled="disableWordsGroup" 
+            /> 
+          </div> 
+        </div> 
+      </section> 
 
-      // keys
-      keys: {
-        numbers: false,
-        punctuation: false,
-      },
+      <!-- time duration --> 
+      <section class="group"> 
+        <div class="group-title">time duration</div> 
+        <div class="group-row wrap"> 
+          <button 
+            class="pill" 
+            :class="{ active: timeSelection === 15 }" 
+            :disabled="disableTimeGroup" 
+            @click="selectTime(15)" 
+          > 
+            15 
+          </button> 
+          <button 
+            class="pill" 
+            :class="{ active: timeSelection === 30 }" 
+            :disabled="disableTimeGroup" 
+            @click="selectTime(30)" 
+          > 
+            30 
+          </button> 
 
-      // mode
-      mode: null,
-      clinicalOptions: [
-        "ABG interpretation",
-        "Sepsis",
-        "Medication safety",
-        "Wound care",
-      ],
-      bodySystemOptions: [
-        "Cardiovascular",
-        "Respiratory",
-        "GI",
-        "Renal",
-        "Neuro",
-        "Endocrine",
-      ],
-      selectedClinical: null,
-      selectedBody: null,
-      showClinical: false,
-      showBody: false,
+          <button 
+            class="pill" 
+            :class="{ active: timeSelection === 60 }" 
+            :disabled="disableTimeGroup" 
+            @click="selectTime(60)" 
+          > 
+            60 
+          </button> 
 
-      // time
-      timeSelection: null, // 15 | 30 | 60 | 120 | 'custom'
-      customMinutes: null,
-    };
+          <!-- Custom time input --> 
+          <div class="custom-time-wrapper"> 
+            <button 
+              class="pill" 
+              :class="{ active: timeSelection === 'custom' }" 
+              :disabled="disableTimeGroup" 
+              @click="toggleTimeCustom" 
+            > 
+              custom 
+            </button> 
+            <input 
+              v-if="showTimeCustom" 
+              type="number" 
+              class="custom-input" 
+              v-model.number="timeCustom" 
+              placeholder=" " 
+              min="2" 
+              :disabled="disableTimeGroup" 
+            /> 
+          </div> 
+        </div> 
+      </section> 
+
+      <!-- Error Message --> 
+      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p> 
+
+      <!-- Footer actions --> 
+      <div class="footer-actions"> 
+        <button class="secondary-btn" @click="resetAll">Reset</button> 
+        <button 
+          class="primary-btn" 
+          :disabled="!isFormValid" 
+          @click="done" 
+        > 
+          Done 
+        </button> 
+      </div> 
+    </div> 
+  </div> 
+</template> 
+
+<script> 
+export default { 
+  name: "CustomizePage", 
+  data() { 
+    return { 
+      username: "GwenStacy", 
+
+      keys: { 
+        numbers: false, 
+        punctuation: false, 
+      }, 
+
+      mode: null, 
+      clinicalOptions: [ 
+        "Diagnosis", 
+        "Doctor’s Prescription", 
+        "Patient Interview", 
+      ], 
+      bodySystemOptions: [ 
+        "Nervous System", 
+        "Circulatory System", 
+        "Respiratory System", 
+      ], 
+      documentationOptions: ["Nursing Notes", "Discharge Instructions"], 
+      selectedClinical: null, 
+      selectedBody: null, 
+      selectedDocumentation: null, 
+      showClinical: false, 
+      showBody: false, 
+      showDocumentation: false, 
+
+      // words group state
+      wordsSelection: null, // 15 | 30 | 60 | 'custom'
+      wordsCustom: "", 
+      showWordsCustom: false, 
+
+      // time group state
+      timeSelection: null, // 15 | 30 | 60 | 'custom'
+      timeCustom: "", 
+      showTimeCustom: false, 
+
+      errorMessage: "", 
+    }; 
+  }, 
+  computed: { 
+    disableKeys() { 
+      return ( 
+        this.mode === "clinical" || 
+        this.mode === "body" || 
+        this.mode === "documentation" 
+      ); 
+    }, 
+    // Disable/enable groups based on mode
+    disableWordsGroup() { 
+      // Only enabled in Words mode
+      return this.mode !== "words"; 
+    }, 
+    disableTimeGroup() { 
+      // Enabled in Time and in other non-Words modes (as before)
+      return this.mode === "words"; 
+    }, 
+    isFormValid() { 
+      const keysSelected = 
+        this.keys.numbers || this.keys.punctuation || this.disableKeys; 
+
+      const modeSelected = 
+        this.mode && 
+        (this.mode === "words" || 
+          this.mode === "time" || 
+          (this.mode === "clinical" && this.selectedClinical) || 
+          (this.mode === "body" && this.selectedBody) || 
+          (this.mode === "documentation" && this.selectedDocumentation)); 
+
+      // Validation per active mode
+      let targetValid = false;
+
+      if (this.mode === "words") {
+        // Allow preset 15/30/60 OR custom >= 61
+        targetValid = 
+          this.wordsSelection === 15 ||
+          this.wordsSelection === 30 ||
+          this.wordsSelection === 60 ||
+          (this.wordsSelection === "custom" && Number(this.wordsCustom) >= 61);
+      } else if (this.mode === "time") {
+        // Allow preset 15/30/60 OR custom >= 2
+        targetValid =
+          this.timeSelection === 15 ||
+          this.timeSelection === 30 ||
+          this.timeSelection === 60 ||
+          (this.timeSelection === "custom" && Number(this.timeCustom) >= 2);
+      } else if (this.mode === "clinical" || this.mode === "body" || this.mode === "documentation") {
+        // Preserve previous behavior: require time selection/preset or custom >=2
+        targetValid =
+          this.timeSelection === 15 ||
+          this.timeSelection === 30 ||
+          this.timeSelection === 60 ||
+          (this.timeSelection === "custom" && Number(this.timeCustom) >= 2);
+      }
+
+      return keysSelected && modeSelected && targetValid && !this.errorMessage; 
+    }, 
+  }, 
+  watch: {
+    // validate on input changes & mode switches
+    wordsCustom() { this.validateWords(true); },
+    timeCustom() { this.validateTime(true); },
+    mode() { 
+      // Clear errors and validate active group upon mode change
+      this.errorMessage = ""; 
+      this.validateWords(true); 
+      this.validateTime(true); 
+    },
+    wordsSelection() { this.validateWords(true); },
+    timeSelection() { this.validateTime(true); },
   },
-  methods: {
-    // Top-bar routes
-    goToSettings() {
-      this.$router.push("/settings");
-    },
-    goToHighscore() {
-      this.$router.push("/highscore");
-    },
-    goToAbout() {
-      this.$router.push("/aboutns");
-    },
-    goToLoggedIn() {
-      this.$router.push("/loggedin");
-    },
-    goToUserPage() {
-      this.$router.push("/user");
-    },
+  methods: { 
+    goToSettings() { this.$router.push("/settings"); }, 
+    goToHighscore() { this.$router.push("/highscore"); }, 
+    goToAbout() { this.$router.push("/aboutns"); }, 
+    goToLoggedIn() { this.$router.push("/loggedin"); }, 
+    goToUserPage() { this.$router.push("/user"); }, 
 
-    // Interactions
-    toggleKey(k) {
-      this.keys[k] = !this.keys[k];
-    },
-    selectMode(m) {
-      this.mode = m;
-      // close dropdowns if switching
-      if (m !== "clinical") this.showClinical = false;
-      if (m !== "body") this.showBody = false;
-    },
-    toggleDropdown(which) {
-      if (which === "clinical") {
-        this.mode = "clinical";
-        this.showClinical = !this.showClinical;
-        this.showBody = false;
+    toggleKey(k) { this.keys[k] = !this.keys[k]; }, 
+
+    selectMode(m) { 
+      this.mode = m; 
+      this.showClinical = false; 
+      this.showBody = false; 
+      this.showDocumentation = false; 
+      // Clear any mode-incompatible errors
+      this.errorMessage = "";
+      this.validateWords(true);
+      this.validateTime(true);
+    }, 
+    toggleDropdown(which) { 
+      this.showClinical = which === "clinical" ? !this.showClinical : false; 
+      this.showBody = which === "body" ? !this.showBody : false; 
+      this.showDocumentation = which === "documentation" ? !this.showDocumentation : false; 
+      this.mode = which; 
+      this.errorMessage = "";
+      this.validateWords(true);
+      this.validateTime(true);
+    }, 
+    selectClinical(opt) { 
+      this.selectedClinical = opt; 
+      this.mode = "clinical"; 
+      this.showClinical = false; 
+      this.errorMessage = "";
+      this.validateTime(true);
+    }, 
+    selectBody(opt) { 
+      this.selectedBody = opt; 
+      this.mode = "body"; 
+      this.showBody = false; 
+      this.errorMessage = "";
+      this.validateTime(true);
+    }, 
+    selectDocumentation(opt) { 
+      this.selectedDocumentation = opt; 
+      this.mode = "documentation"; 
+      this.showDocumentation = false; 
+      this.errorMessage = "";
+      this.validateTime(true);
+    }, 
+
+    // --- Number of words handlers ---
+    selectWords(val) { 
+      if (this.disableWordsGroup) return; 
+      this.wordsSelection = val; 
+      this.showWordsCustom = false; 
+      this.wordsCustom = ""; 
+      // Clear words-related errors
+      if (this.mode === "words") this.errorMessage = ""; 
+    }, 
+    toggleWordsCustom() { 
+      if (this.disableWordsGroup) return; 
+      this.wordsSelection = "custom"; 
+      this.showWordsCustom = !this.showWordsCustom; 
+      if (!this.showWordsCustom) { this.wordsCustom = ""; } 
+      this.validateWords(true);
+    }, 
+    validateWords(clearWhenEmpty = false) {
+      // Only validate when Words mode AND custom is shown/selected
+      if (this.mode !== "words") return; 
+      if (this.wordsSelection !== "custom" || !this.showWordsCustom) {
+        this.errorMessage = "";
+        return;
+      }
+      const n = Number(this.wordsCustom);
+      if (!this.wordsCustom && clearWhenEmpty) {
+        this.errorMessage = "";
+        return;
+      }
+      if (!Number.isFinite(n) || n < 61) {
+        this.errorMessage = "Invalid input. Please input numbers above 60.";
       } else {
-        this.mode = "body";
-        this.showBody = !this.showBody;
-        this.showClinical = false;
+        this.errorMessage = "";
       }
     },
-    selectClinical(opt) {
-      this.selectedClinical = opt;
-      this.mode = "clinical";
-      this.showClinical = false;
+
+    // --- Time duration handlers ---
+    selectTime(val) { 
+      if (this.disableTimeGroup) return; 
+      this.timeSelection = val; 
+      this.showTimeCustom = false; 
+      this.timeCustom = ""; 
+      // Clear time-related errors
+      if (this.mode !== "words") this.errorMessage = ""; 
+    }, 
+    toggleTimeCustom() { 
+      if (this.disableTimeGroup) return; 
+      this.timeSelection = "custom"; 
+      this.showTimeCustom = !this.showTimeCustom; 
+      if (!this.showTimeCustom) { this.timeCustom = ""; } 
+      this.validateTime(true);
+    }, 
+    validateTime(clearWhenEmpty = false) {
+      // Validate when Time mode OR other non-Words modes using time
+      const shouldValidate = (this.mode === "time") || (this.mode === "clinical") || (this.mode === "body") || (this.mode === "documentation");
+      if (!shouldValidate) return;
+
+      if (this.timeSelection !== "custom" || !this.showTimeCustom) {
+        // No error if not in custom or not visible
+        if (this.mode !== "words") this.errorMessage = ""; 
+        return;
+      }
+      const n = Number(this.timeCustom);
+      if (!this.timeCustom && clearWhenEmpty) {
+        this.errorMessage = "";
+        return;
+      }
+      if (!Number.isFinite(n) || n < 2) {
+        this.errorMessage = "Invalid input. Please input the number 2 and above.";
+      } else {
+        this.errorMessage = "";
+      }
     },
-    selectBody(opt) {
-      this.selectedBody = opt;
-      this.mode = "body";
-      this.showBody = false;
+
+    // --- route decision helper ---
+    getDestinationRoute() {
+      if (this.mode === "words") return "/words";
+      if (this.mode === "time") return "/time";
+
+      if (this.mode === "clinical") {
+        switch (this.selectedClinical) {
+          case "Diagnosis": return "/diagnosis";
+          case "Doctor’s Prescription": return "/doctorsprescrip";
+          case "Patient Interview": return "/patientinterview";
+        }
+      }
+
+      if (this.mode === "body") {
+        switch (this.selectedBody) {
+          case "Nervous System": return "/nervoussys";
+          case "Circulatory System": return "/circulatorysys";
+          case "Respiratory System": return "/respiratorysys";
+        }
+      }
+
+      if (this.mode === "documentation") {
+        switch (this.selectedDocumentation) {
+          case "Nursing Notes": return "/nursingnotes";
+          case "Discharge Instructions": return "/dischargeinstruc";
+        }
+      }
+
+      return "/loggedin";
     },
-    selectTime(val) {
-      this.timeSelection = val;
-      if (val !== "custom") this.customMinutes = null;
-    },
 
-    resetAll() {
-      this.keys = { numbers: false, punctuation: false };
-      this.mode = null;
-      this.selectedClinical = null;
-      this.selectedBody = null;
-      this.showClinical = false;
-      this.showBody = false;
-      this.timeSelection = null;
-      this.customMinutes = null;
-    },
+    resetAll() { 
+      this.keys = { numbers: false, punctuation: false }; 
+      this.mode = null; 
+      this.selectedClinical = null; 
+      this.selectedBody = null; 
+      this.selectedDocumentation = null; 
+      this.showClinical = false; 
+      this.showBody = false; 
+      this.showDocumentation = false; 
 
-    done() {
-      // Example payload you might save/emit if needed later
-      // const payload = {
-      //   keys: this.keys,
-      //   mode: this.mode,
-      //   clinical: this.selectedClinical,
-      //   body: this.selectedBody,
-      //   time: this.timeSelection === 'custom' ? this.customMinutes : this.timeSelection
-      // };
-      this.$router.push("/loggedin");
-    },
-  },
-};
-</script>
+      this.wordsSelection = null; 
+      this.wordsCustom = ""; 
+      this.showWordsCustom = false; 
 
-<style scoped>
-.app-container {
-  font-family: "Inter", sans-serif;
-  background: #f5f7fb;
-  min-height: 100vh;
-  color: #1f2a44;
-}
+      this.timeSelection = null; 
+      this.timeCustom = ""; 
+      this.showTimeCustom = false; 
 
-/* ---------- TOP BAR (unchanged) ---------- */
-.top-bar {
-  width: 100%;
-  height: 80px;
-  background: #f9fbfd;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0px 215px;
-}
+      this.errorMessage = ""; 
+    }, 
 
-.logo {
-  font-weight: bold;
-  font-size: 25px;
-  color: #004aad;
-  cursor: pointer;
-}
+    done() { 
+      if (!this.isFormValid) { 
+        if (!this.errorMessage) {
+          this.errorMessage = "Please select at least one option from each section before continuing."; 
+        }
+        return; 
+      } 
+      this.errorMessage = ""; 
+      const dest = this.getDestinationRoute();
+      this.$router.push(dest); 
+    }, 
+  }, 
+}; 
+</script> 
 
-.right-section {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
+<style scoped> 
+.app-container { 
+  font-family: "Inter", sans-serif; 
+  background: #f9fbfd; 
+  min-height: 100vh; 
+  color: #1f2a44; 
+} 
 
-.username {
-  font-size: 16px;
-  color: #333;
-  cursor: pointer;
-  text-decoration: none;
-}
+.top-bar { 
+  width: 100%; 
+  height: 80px; 
+  background: #f9fbfd; 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  padding: 0px 215px; 
+} 
 
-.progress-circle {
-  width: 30px;
-  height: 30px;
-  background-color: #004aad;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+.logo { 
+  font-weight: bold; 
+  font-size: 25px; 
+  color: #004aad; 
+  cursor: pointer; 
+} 
 
-.progress-number {
-  color: white;
-  font-weight: bold;
-  font-size: 15px;
-}
+.right-section { 
+  display: flex; 
+  align-items: center; 
+  gap: 15px; 
+} 
 
-.icon-img {
-  height: 30px;
-  width: auto;
-  cursor: pointer;
-}
+.username { 
+  font-size: 16px; 
+  color: #333; 
+  cursor: pointer; 
+  text-decoration: none; 
+} 
 
-/* ---------- CUSTOMIZE LAYOUT ---------- */
-.customize-shell {
-  max-width: 1120px;
-  margin: 30px auto 60px;
-  padding: 0 24px;
-}
+.progress-circle { 
+  width: 30px; 
+  height: 30px; 
+  background-color: #004aad; 
+  border-radius: 50%; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+} 
 
-.group {
-  background: #ffffff;
-  border: 1px solid #e5e9f2;
-  border-radius: 10px;
-  padding: 22px 26px;
-  margin-bottom: 22px;
-}
+.progress-number { 
+  color: white; 
+  font-weight: bold; 
+  font-size: 15px; 
+} 
 
-.group-title {
-  font-size: 14px;
-  color: #6b7280;
-  margin-bottom: 12px;
-  text-transform: lowercase;
-}
+.icon-img { 
+  height: 30px; 
+  width: auto; 
+  cursor: pointer; 
+} 
 
-.group-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
+/* ---------- CUSTOMIZE LAYOUT ---------- */ 
+.customize-shell { 
+  max-width: 1120px; 
+  margin: 100px auto 60px; 
+  padding: 0 24px; 
+  position: relative; 
+} 
 
-.group-row.wrap {
-  flex-wrap: wrap;
-}
+/* Close Button */ 
+.close-btn { 
+  position: absolute; 
+  top: -50px; 
+  right: -20px; 
+  background: transparent; 
+  border: none; 
+  font-size: 32px; 
+  color: #333; 
+  cursor: pointer; 
+  line-height: 1; 
+} 
 
-/* Pills (boxes) */
-.pill {
-  appearance: none;
-  border: 1px solid #d8deeb;
-  background: #f3f6fb;
-  color: #203765;
-  padding: 12px 20px;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  min-width: 96px;
-  text-align: center;
-}
+.close-btn:hover { 
+  color: #004aad; 
+} 
 
-.pill:hover {
-  filter: brightness(0.97);
-}
+.group { 
+  background: #ffffff; 
+  border: 1px solid #e5e9f2; 
+  border-radius: 10px; 
+  padding: 22px 26px; 
+  margin-bottom: 22px; 
+} 
 
-.pill.active {
-  background: #2e55a2;
-  color: #ffffff;
-  border-color: #2e55a2;
-}
+.group-title { 
+  font-size: 14px; 
+  color: #6b7280; 
+  margin-bottom: 12px; 
+  text-transform: lowercase; 
+} 
 
-.pill.with-caret {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
+.group-row { 
+  display: flex; 
+  align-items: center; 
+  gap: 14px; 
+} 
 
-.caret {
-  font-size: 12px;
-  opacity: 0.9;
-}
+.group-row.wrap { 
+  flex-wrap: wrap; 
+} 
 
-/* Dropdowns */
-.dropdown-wrapper {
-  position: relative;
-}
+.pill { 
+  appearance: none; 
+  border: 1px solid #d8deeb; 
+  background: #f3f6fb; 
+  color: #203765; 
+  padding: 6px 12px; 
+  border-radius: 8px; 
+  font-size: 14px; 
+  cursor: pointer; 
+  transition: all 0.15s ease; 
+  min-width: 96px; 
+  text-align: center; 
+} 
 
-.dropdown {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
-  min-width: 220px;
-  background: #ffffff;
-  border: 1px solid #e3e8f5;
-  box-shadow: 0 8px 24px rgba(25, 44, 92, 0.08);
-  border-radius: 10px;
-  z-index: 10;
-  padding: 8px;
-}
+.pill:hover { 
+  filter: brightness(0.97); 
+} 
 
-.dropdown-item {
-  padding: 10px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  color: #1f2a44;
-}
+.pill.active { 
+  background: #004aad; 
+  color: #ffffff; 
+  border-color: #004aad; 
+} 
 
-.dropdown-item:hover {
-  background: #f2f6ff;
-}
+.pill:disabled { 
+  background: #e9edf5; 
+  color: #a0aec0; 
+  cursor: not-allowed; 
+} 
 
-.dropdown-item.selected {
-  background: #e7eefc;
-  color: #2e55a2;
-}
+.pill.with-caret { 
+  display: inline-flex; 
+  align-items: center; 
+  justify-content: center; 
+  gap: 8px; 
+} 
 
-/* Custom time input */
-.custom-time {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
+.caret { 
+  font-size: 12px; 
+  opacity: 0.9; 
+} 
 
-.custom-input {
-  width: 90px;
-  height: 40px;
-  padding: 0 10px;
-  border-radius: 8px;
-  border: 1px solid #d8deeb;
-  background: #ffffff;
-  font-size: 14px;
-  outline: none;
-}
+.custom-time-wrapper { 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+} 
 
-/* Footer buttons */
-.footer-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 16px;
-  margin-top: 28px;
-}
+.custom-input { 
+  width: 90px; 
+  padding: 10px; 
+  border: 1px solid #d8deeb; 
+  border-radius: 6px; 
+  font-size: 14px; 
+  outline: none; 
+} 
 
-.primary-btn,
-.secondary-btn {
-  border: none;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  font-size: 15px;
-  padding: 12px 26px;
-  transition: transform 0.05s ease, filter 0.1s ease;
-}
+.custom-input:focus { 
+  border-color: #2e55a2; 
+} 
 
-.primary-btn {
-  background: #2e55a2;
-  color: #ffffff;
-}
+.dropdown-wrapper { 
+  position: relative; 
+} 
 
-.primary-btn:active,
-.secondary-btn:active {
-  transform: translateY(1px);
-}
+.dropdown { 
+  position: absolute; 
+  top: calc(100% + 8px); 
+  left: 0; 
+  min-width: 220px; 
+  background: #ffffff; 
+  border: 1px solid #e3e8f5; 
+  box-shadow: 0 8px 24px rgba(25, 44, 92, 0.08); 
+  border-radius: 10px; 
+  z-index: 10; 
+  padding: 8px; 
+} 
 
-.secondary-btn {
-  background: #eef2f9;
-  color: #274472;
-}
+.dropdown-item { 
+  padding: 10px 12px; 
+  border-radius: 8px; 
+  cursor: pointer; 
+  font-size: 14px; 
+  color: #1f2a44; 
+} 
 
-.secondary-btn:hover {
-  filter: brightness(0.98);
-}
+.dropdown-item:hover { 
+  background: #f2f6ff; 
+} 
 
-.primary-btn:hover {
-  filter: brightness(0.98);
-}
+.dropdown-item.selected { 
+  background: #e7eefc; 
+  color: #2e55a2; 
+} 
+
+.footer-actions { 
+  display: flex; 
+  justify-content: flex-end; 
+  gap: 16px; 
+  margin-top: 28px; 
+} 
+
+.primary-btn, 
+.secondary-btn { 
+  border: none; 
+  border-radius: 10px; 
+  font-weight: 600; 
+  cursor: pointer; 
+  font-size: 15px; 
+  padding: 12px 26px; 
+  transition: transform 0.05s ease, filter 0.1s ease; 
+} 
+
+.primary-btn { 
+  background: #2e55a2; 
+  color: #ffffff; 
+} 
+
+.primary-btn:disabled { 
+  background: #b0c3e1; 
+  cursor: not-allowed; 
+} 
+
+.primary-btn:active, 
+.secondary-btn:active { 
+  transform: translateY(1px); 
+} 
+
+.secondary-btn { 
+  background: #eef2f9; 
+  color: #274472; 
+} 
+
+.secondary-btn:hover { 
+  filter: brightness(0.98); 
+} 
+
+.primary-btn:hover { 
+  filter: brightness(0.98); 
+} 
+
+.error-message { 
+  color: #d93025; 
+  font-size: 14px; 
+  margin: 10px 0; 
+  text-align: right; 
+} 
 </style>

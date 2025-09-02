@@ -110,10 +110,8 @@
       </section>
 
       <section class="actions">
-        <button class="btn ghost" @click="goToCustomize">Customize</button>
         <button class="btn secondary" @click="goToHighscore">View Highscores</button>
         <button class="btn primary" @click="tryAgain">Try Again</button>
-        <button class="btn outline" @click="shareResult">Share</button>
       </section>
     </main>
   </div>
@@ -233,7 +231,7 @@ export default {
 <style scoped>
 .app-container {
   font-family: "Inter", sans-serif;
-  background: #f5f7fb;
+  background: #f9fbfd;
   min-height: 100vh;
   color: #1f2a44;
 }

@@ -43,7 +43,7 @@
       <!-- Timer and Customize -->
       <div class="timer-section">
         <button class="btn customize-btn" @click="goToCustomize">Customize</button>
-        <span class="time-text">Time: {{ timeLeft }}</span>
+        <span class="time-text">Time</span>
         <div class="progress-bar">
           <div class="progress" :style="{ width: progressWidth + '%' }"></div>
         </div>
@@ -279,7 +279,7 @@ export default {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  gap: 25px;
+  gap: 50px;
   margin-top: 100px;
 }
 
@@ -324,7 +324,7 @@ export default {
   border-radius: 10px;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.05);
   border: 1px solid #ddd;
-  font-size: 21px;
+  font-size: 28px;
   line-height: 1.5;
   outline: none;
   cursor: text;

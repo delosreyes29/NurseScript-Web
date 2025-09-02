@@ -3,10 +3,38 @@
     <!-- Top Bar -->
     <header class="top-bar">
       <div class="left-section">
-        <span class="logo">NurseScripts</span>
+        <span class="logo" @click="goToHome" style="cursor: pointer;">NurseScripts</span>
       </div>
       <div class="right-section">
-        <button class="btn login-btn" @click="goToLogin">Log In</button>
+        <!-- Username -->
+        <a @click="$router.push('/user')" style="cursor: pointer; text-decoration: none; color: inherit;">
+          GwenStacy
+        </a>
+
+        <!-- Progress Circle -->
+        <div class="progress-circle">
+          <span class="progress-number">5</span>
+        </div>
+
+        <!-- Icons -->
+        <img
+          src="@/assets/settings.png"
+          alt="Settings"
+          class="icon-img"
+          @click="goToSettings"
+        />
+        <img
+          src="@/assets/highscore.png"
+          alt="Highscore"
+          class="icon-img"
+          @click="goToHighscore"
+        />
+        <img
+          src="@/assets/about.png"
+          alt="About"
+          class="icon-img"
+          @click="goToAbout"
+        />
       </div>
     </header>
 
@@ -14,7 +42,7 @@
     <div class="main-section">
       <!-- Timer and Customize -->
       <div class="timer-section">
-        <button class="btn customize-btn" @click="showWarning">Customize</button>
+        <button class="btn customize-btn" @click="goToCustomize">Customize</button>
         <span class="time-text">Time</span>
         <div class="progress-bar">
           <div class="progress" :style="{ width: progressWidth + '%' }"></div>
@@ -40,13 +68,6 @@
         </span>
       </div>
 
-      <!-- Warning Message -->
-      <transition name="fade">
-        <div v-if="warningVisible" class="warning-message">
-          Please login to use the customize menu and save your progress.
-        </div>
-      </transition>
-
       <!-- Redo Button -->
       <div class="redo-section">
         <img
@@ -65,7 +86,7 @@
 
 <script>
 export default {
-  name: "NotLoggedIn",
+  name: "TimeMode",
   data() {
     return {
       timeLeft: 30,
@@ -73,9 +94,10 @@ export default {
       typedText: "",
       typingStarted: false,
       timer: null,
-      warningVisible: false,
+      correct: 0,
+      incorrect: 0,
       textToType:
-        "NurseScripts is a typing test website designed specifically for nursing students to improve both their typing speed and medical terminology skills. Unlike regular typing platforms that use random words, NurseScripts focuses on real-world clinical scenarios, patient cases, and medical vocabulary that nurses encounter in their daily work. By practicing here, students not only become faster and more accurate typists but also gain confidence in documenting patient information, writing orders, and handling critical records. This makes the practice directly relevant to their profession and more beneficial than other typing test sites. With NurseScripts, nursing students can build efficiency, accuracy, and confidence—skills that carry over into real-world healthcare settings where precision and speed truly matter."
+        "During the SOAP interview, the student nurse greeted Ms. Rivera and confirmed identity. She gathered Subjective data: chest tightness starting yesterday, worse with exertion, relieved by rest, pain seven of ten, no radiation, mild nausea, history of hypertension and smoking. Objective findings included anxious affect, respiratory rate twenty-four, pulse ninety-eight, blood pressure one fifty-eight over ninety, oxygen saturation ninety-four percent on room air, lungs clear, skin cool. She formulated an Assessment of possible unstable angina versus anxiety, prioritized safety, and notified the RN. The Plan included continuous monitoring, twelve-lead ECG, nitroglycerin per protocol, education, and reassessment every fifteen minutes. Documented."
     };
   },
   computed: {
@@ -89,7 +111,7 @@ export default {
 
       if (e.key === "Tab") {
         e.preventDefault();
-        this.$refs.redoBtn && this.$refs.redoBtn.focus();
+        this.$refs.redoBtn.focus();
         return;
       }
 
@@ -105,6 +127,14 @@ export default {
 
       if (e.key.length === 1) {
         this.typedText += e.key;
+
+        // Track correctness as user types
+        const currentIndex = this.typedText.length - 1;
+        if (this.textToType[currentIndex] === e.key) {
+          this.correct++;
+        } else {
+          this.incorrect++;
+        }
       }
     },
     getCharClass(index) {
@@ -122,6 +152,7 @@ export default {
           this.timeLeft--;
         } else {
           clearInterval(this.timer);
+          this.finishTest();
         }
       }, 1000);
     },
@@ -129,16 +160,46 @@ export default {
       clearInterval(this.timer);
       this.timeLeft = this.totalTime;
       this.typedText = "";
+      this.correct = 0;
+      this.incorrect = 0;
       this.typingStarted = false;
     },
-    goToLogin() {
-      this.$router.push("/login");
+    finishTest() {
+      const elapsed = this.totalTime;
+      const wordsTyped = this.typedText.trim().split(/\s+/).length;
+      const wpm = Math.round((wordsTyped / elapsed) * 60);
+      const totalChars = this.typedText.length;
+      const accuracy = totalChars > 0 ? Math.round((this.correct / totalChars) * 100) : 0;
+
+      this.$router.push({
+        path: "/results",
+        query: {
+          wpm,
+          accuracy,
+          time: elapsed,
+          correct: this.correct,
+          incorrect: this.incorrect,
+          backspaces: 0
+        }
+      });
     },
-    showWarning() {
-      this.warningVisible = true;
-      setTimeout(() => {
-        this.warningVisible = false;
-      }, 3000);
+    goToSettings() {
+      this.$router.push("/settings");
+    },
+    goToHome() {
+      this.$router.push("/loggedin"); 
+    },
+    goToUserPage() {
+      this.$router.push("/user");
+    },
+    goToHighscore() {
+      this.$router.push("/highscore"); 
+    },
+    goToAbout() {
+      this.$router.push("/aboutns");
+    },
+    goToCustomize() {
+      this.$router.push("/customize");
     }
   },
   beforeUnmount() {
@@ -157,6 +218,7 @@ export default {
   flex-direction: column;
 }
 
+/* Top bar */
 .top-bar {
   width: 100%;
   height: 80px;
@@ -164,7 +226,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0px 215px;
+  padding:  0px 215px;
   box-shadow: none;
 }
 
@@ -177,20 +239,31 @@ export default {
 .right-section {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 15px;
 }
 
-.btn {
-  background: #004aad;
-  border: none;
+/* Username */
+.username {
+  font-weight: normal;
+  font-size: 18px;
+  color: #333;
+}
+
+/* Progress Circle */
+.progress-circle {
+  width: 30px;
+  height: 30px;
+  background-color: #004aad;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-number {
   color: white;
-  padding: 6px 12px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.btn:hover {
-  opacity: 0.9;
+  font-weight: bold;
+  font-size: 15px;
 }
 
 .icon-img {
@@ -199,16 +272,18 @@ export default {
   cursor: pointer;
 }
 
+/* Centered Section */
 .main-section {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  gap: 25px;
+  gap: 50px;
   margin-top: 100px;
 }
 
+/* Timer Section */
 .timer-section {
   display: flex;
   align-items: center;
@@ -217,6 +292,7 @@ export default {
 }
 
 .customize-btn {
+  color: white;
   background: #004aad;
   padding: 6px 12px;
 }
@@ -239,6 +315,7 @@ export default {
   transition: width 0.3s linear;
 }
 
+/* Typing Box */
 .typing-box {
   width: 70%;
   min-height: 150px;
@@ -247,7 +324,7 @@ export default {
   border-radius: 10px;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.05);
   border: 1px solid #ddd;
-  font-size: 21px;
+  font-size: 28px;
   line-height: 1.5;
   outline: none;
   cursor: text;
@@ -267,6 +344,7 @@ export default {
   color: red;
 }
 
+/* Cursor */
 .cursor {
   display: inline-block;
   width: 2px;
@@ -283,6 +361,7 @@ export default {
   100% { opacity: 1; }
 }
 
+/* Redo Section */
 .redo-section {
   margin-top: 5px;
 }
@@ -296,24 +375,5 @@ export default {
 .redo-img:focus {
   outline: 3px solid #004aad;
   border-radius: 6px;
-}
-
-/* Warning Message */
-.warning-message {
-  color: #d9534f;
-  font-weight: 500;
-  margin-top: 10px;
-  background: #f8d7da;
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #f5c6cb;
-}
-
-/* Fade transition for warning */
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-.fade-enter-from, .fade-leave-to {
-  opacity: 0;
 }
 </style>

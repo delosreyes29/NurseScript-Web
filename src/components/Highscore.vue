@@ -33,12 +33,21 @@
     <!-- High Score Content -->
     <div class="highscore-container">
       <h1 class="highscore-title">Leaderboard</h1>
+      <p class="description">
+        Check out the top typists from the past few days! They’re ranked by their overall typing scores, 
+        which factor in speed, text length, character variety, and accuracy. 
+        The scoring system rewards fast, accurate typing on longer, more complex texts, so the fewer mistakes, the higher the score!
+      </p>
+
       <table class="highscore-table">
         <thead>
           <tr>
             <th>Rank</th>
             <th>Username</th>
             <th>Score</th>
+            <th>WPM</th>
+            <th>Accuracy</th>
+            <th>Consistency</th>
           </tr>
         </thead>
         <tbody>
@@ -50,6 +59,9 @@
             <td>{{ index + 1 }}</td>
             <td>{{ player.username }}</td>
             <td>{{ player.score }}</td>
+            <td>{{ player.wpm }}</td>
+            <td>{{ player.accuracy }}%</td>
+            <td>{{ player.consistency }}%</td>
           </tr>
         </tbody>
       </table>
@@ -64,13 +76,16 @@ export default {
     return {
       username: "GwenStacy",
       players: [
-        { username: "PeterParker", score: 1200 },
-        { username: "TonyStark", score: 1100 },
-        { username: "Natasha", score: 1050 },
-        { username: "BruceBanner", score: 1000 },
-        { username: "GwenStacy", score: 980 },
-        { username: "ClintBarton", score: 900 },
-        { username: "SteveRogers", score: 850 }
+        { username: "PeterParker", score: 1200, wpm: 92, accuracy: 98, consistency: 95 },
+        { username: "TonyStark", score: 1100, wpm: 89, accuracy: 97, consistency: 94 },
+        { username: "Natasha", score: 1050, wpm: 85, accuracy: 96, consistency: 92 },
+        { username: "BruceBanner", score: 1000, wpm: 80, accuracy: 95, consistency: 90 },
+        { username: "GwenStacy", score: 980, wpm: 78, accuracy: 94, consistency: 91 },
+        { username: "ClintBarton", score: 900, wpm: 75, accuracy: 92, consistency: 89 },
+        { username: "SteveRogers", score: 850, wpm: 70, accuracy: 91, consistency: 88 },
+        { username: "Wanda", score: 820, wpm: 68, accuracy: 90, consistency: 87 },
+        { username: "Vision", score: 800, wpm: 67, accuracy: 89, consistency: 85 },
+        { username: "Thor", score: 780, wpm: 65, accuracy: 88, consistency: 84 }
       ]
     };
   },
@@ -160,7 +175,7 @@ export default {
 
 /* High Score Table */
 .highscore-container {
-  max-width: 800px;
+  max-width: 900px;
   margin: 40px auto;
   padding: 20px;
   background: #fff;
@@ -173,7 +188,16 @@ export default {
   font-size: 28px;
   font-weight: bold;
   color: #24488b;
+  margin-bottom: 10px;
+}
+
+.description {
+  text-align: center;
+  font-size: 16px;
+  color: #555;
   margin-bottom: 20px;
+  line-height: 1.5;
+  padding: 0 15px;
 }
 
 .highscore-table {
