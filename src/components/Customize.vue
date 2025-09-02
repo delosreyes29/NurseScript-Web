@@ -34,7 +34,7 @@
     <!-- Customize Content --> 
     <div class="customize-shell"> 
       <!-- Close Button --> 
-      <button class="close-btn" @click="goToLoggedIn">×</button> 
+      <button class="close-btn" @click="goBack">×</button> 
 
       <!-- Keys to include --> 
       <section class="group"> 
@@ -340,11 +340,9 @@ export default {
     }, 
     // Disable/enable groups based on mode
     disableWordsGroup() { 
-      // Only enabled in Words mode
       return this.mode !== "words"; 
     }, 
     disableTimeGroup() { 
-      // Enabled in Time and in other non-Words modes (as before)
       return this.mode === "words"; 
     }, 
     isFormValid() { 
@@ -377,7 +375,7 @@ export default {
           this.timeSelection === 60 ||
           (this.timeSelection === "custom" && Number(this.timeCustom) >= 2);
       } else if (this.mode === "clinical" || this.mode === "body" || this.mode === "documentation") {
-        // Preserve previous behavior: require time selection/preset or custom >=2
+        // Require time selection/preset or custom >=2
         targetValid =
           this.timeSelection === 15 ||
           this.timeSelection === 30 ||
@@ -389,11 +387,9 @@ export default {
     }, 
   }, 
   watch: {
-    // validate on input changes & mode switches
     wordsCustom() { this.validateWords(true); },
     timeCustom() { this.validateTime(true); },
     mode() { 
-      // Clear errors and validate active group upon mode change
       this.errorMessage = ""; 
       this.validateWords(true); 
       this.validateTime(true); 
@@ -402,6 +398,16 @@ export default {
     timeSelection() { this.validateTime(true); },
   },
   methods: { 
+    // NEW: go back to the previous page for the X button
+    goBack() {
+      if (window.history.length > 1) {
+        this.$router.back();
+      } else {
+        // fallback if no history (e.g., direct load)
+        this.$router.push("/loggedin");
+      }
+    },
+
     goToSettings() { this.$router.push("/settings"); }, 
     goToHighscore() { this.$router.push("/highscore"); }, 
     goToAbout() { this.$router.push("/aboutns"); }, 
@@ -415,7 +421,6 @@ export default {
       this.showClinical = false; 
       this.showBody = false; 
       this.showDocumentation = false; 
-      // Clear any mode-incompatible errors
       this.errorMessage = "";
       this.validateWords(true);
       this.validateTime(true);
@@ -457,7 +462,6 @@ export default {
       this.wordsSelection = val; 
       this.showWordsCustom = false; 
       this.wordsCustom = ""; 
-      // Clear words-related errors
       if (this.mode === "words") this.errorMessage = ""; 
     }, 
     toggleWordsCustom() { 
@@ -468,7 +472,6 @@ export default {
       this.validateWords(true);
     }, 
     validateWords(clearWhenEmpty = false) {
-      // Only validate when Words mode AND custom is shown/selected
       if (this.mode !== "words") return; 
       if (this.wordsSelection !== "custom" || !this.showWordsCustom) {
         this.errorMessage = "";
@@ -492,7 +495,6 @@ export default {
       this.timeSelection = val; 
       this.showTimeCustom = false; 
       this.timeCustom = ""; 
-      // Clear time-related errors
       if (this.mode !== "words") this.errorMessage = ""; 
     }, 
     toggleTimeCustom() { 
@@ -503,12 +505,10 @@ export default {
       this.validateTime(true);
     }, 
     validateTime(clearWhenEmpty = false) {
-      // Validate when Time mode OR other non-Words modes using time
       const shouldValidate = (this.mode === "time") || (this.mode === "clinical") || (this.mode === "body") || (this.mode === "documentation");
       if (!shouldValidate) return;
 
       if (this.timeSelection !== "custom" || !this.showTimeCustom) {
-        // No error if not in custom or not visible
         if (this.mode !== "words") this.errorMessage = ""; 
         return;
       }
@@ -807,10 +807,10 @@ export default {
 .secondary-btn { 
   border: none; 
   border-radius: 10px; 
-  font-weight: 600; 
+  font-weight: 500; 
   cursor: pointer; 
   font-size: 15px; 
-  padding: 12px 26px; 
+  padding: 10px 25px; 
   transition: transform 0.05s ease, filter 0.1s ease; 
 } 
 

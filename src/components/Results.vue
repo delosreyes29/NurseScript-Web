@@ -204,8 +204,14 @@ export default {
 
     // Actions
     tryAgain() {
-      // Send them back to the test screen (LoggedIn)
-      this.$router.push("/loggedin");
+      // Go back to the previous page (the test the user came from).
+      // Fallback to a sensible page if there is no history entry.
+      if (window.history.length > 1) {
+        this.$router.back();
+      } else {
+        const fallback = this.$route.query.prev || "/loggedin";
+        this.$router.push(fallback);
+      }
     },
     goToCustomize() {
       this.$router.push("/customize");
@@ -221,7 +227,7 @@ export default {
           alert("Result copied to clipboard!");
         }
       } catch {
-        // If user cancels share
+        // User canceled share
       }
     },
   },
