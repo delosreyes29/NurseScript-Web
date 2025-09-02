@@ -259,7 +259,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 215px;
+  padding: 0 330px;
 }
 .logo { font-weight: bold; font-size: 25px; color: #004aad; cursor: pointer; }
 .right-section { display: flex; align-items: center; gap: 15px; }

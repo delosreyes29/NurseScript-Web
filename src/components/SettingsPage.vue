@@ -208,7 +208,6 @@ export default {
       this.closeReauthModal();
     },
     logoutUser() {
-      // alert("You have been logged out!");
       this.$router.push("/"); // Redirect to login or home page
     },
     goToSettings() {
@@ -249,7 +248,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0px 215px;
+  padding: 0px 330px;
   box-shadow: none;
 }
 

@@ -333,7 +333,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0px 215px;
+  padding: 0px 330px;
 }
 .logo { font-weight: bold; font-size: 25px; color: #004aad; }
 .right-section { display: flex; align-items: center; gap: 15px; }
