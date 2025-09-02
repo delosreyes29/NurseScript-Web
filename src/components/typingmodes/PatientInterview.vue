@@ -48,20 +48,22 @@
         </div>
       </div>
 
-      <!-- Sheet (ONLY typing surface) -->
+      <!-- Typing sheet (initially empty; user types what they hear) -->
       <div
         class="sheet"
         tabindex="0"
         ref="sheet"
         @keydown="handleKeyPress"
       >
-        <span v-for="(ch, i) in textToType.split('')" :key="i">
-          <span :class="getCharClass(i)">{{ ch }}</span>
-          <span
-            v-if="i === typedText.length && typedText.length < textToType.length"
-            class="cursor"
-          ></span>
-        </span>
+        <template v-if="typedWords.length">
+          <template v-for="(w, i) in typedWords" :key="'w'+i">
+            <span :class="wordClass(i)">{{ w }}</span>
+            <!-- NBSP to ensure a visible space that won't collapse at line breaks -->
+            <span class="space">&nbsp;</span>
+          </template>
+        </template>
+        <!-- caret at end -->
+        <span class="cursor"></span>
       </div>
 
       <!-- Submit -->
@@ -81,24 +83,33 @@ export default {
       typedText: "",
       startedAt: null,
       typingStarted: false,
-      correct: 0,
-      incorrect: 0,
 
       // audio (frontend-only mock)
       isPlaying: false,
-      duration: 120, // seconds
-      currentTime: 10,
+      duration: 120, // seconds (mock)
+      currentTime: 0,
       audioTimer: null,
       dragging: false,
 
-      // passage
-      textToType:
-        " "
+      // Hidden reference transcript (what the audio says)
+      referenceText:
+        "During the initial consultation, the patient, Mr. Juan Dela Cruz, a 45-year-old male, presented with complaints of persistent chest discomfort and occasional shortness of breath over the past two weeks. He described the pain as a dull, pressure–like sensation located in the center of his chest, occasionally radiating to the left shoulder. The symptoms are typically triggered by physical exertion and relieved by rest. He denied any history of similar episodes."
     };
   },
   computed: {
     progressPct() {
       return Math.min(100, Math.max(0, (this.currentTime / this.duration) * 100));
+    },
+    referenceWords() {
+      return this.referenceText.trim().split(/\s+/);
+    },
+    typedWords() {
+      const t = this.typedText.trim();
+      if (!t) return [];
+      return t.split(/\s+/);
+    },
+    lastWordCommitted() {
+      return /\s$/.test(this.typedText);
     }
   },
   methods: {
@@ -111,23 +122,41 @@ export default {
         this.startedAt = Date.now();
       }
 
+      // SPACE — explicitly capture so it doesn't scroll the page
+      if (e.code === "Space" || e.key === " ") {
+        e.preventDefault();
+        this.typedText += " ";
+        return;
+      }
+
+      // BACKSPACE — prevent browser navigation on non-inputs
       if (e.key === "Backspace") {
+        e.preventDefault();
         if (this.typedText.length > 0) this.typedText = this.typedText.slice(0, -1);
         return;
       }
 
+      // ENTER adds a space between phrases
+      if (e.key === "Enter") {
+        e.preventDefault();
+        this.typedText += " ";
+        return;
+      }
+
+      // Printable characters
       if (e.key.length === 1) {
+        e.preventDefault();
         this.typedText += e.key;
-        const idx = this.typedText.length - 1;
-        if (this.textToType[idx] === e.key) this.correct++;
-        else this.incorrect++;
       }
     },
-    getCharClass(i) {
-      if (i < this.typedText.length) {
-        return this.typedText[i] === this.textToType[i] ? "correct" : "incorrect";
-      }
-      return "pending";
+
+    // Return class for a given word index, only when word is committed
+    wordClass(i) {
+      const committed = this.lastWordCommitted || i < this.typedWords.length - 1;
+      if (!committed) return "pending-word";
+      const expected = this.referenceWords[i] || "";
+      const actual = this.typedWords[i] || "";
+      return expected === actual ? "correct" : "incorrect";
     },
 
     /* ---------- Audio mock ---------- */
@@ -140,9 +169,8 @@ export default {
       this.stopAudioTimer();
       this.audioTimer = setInterval(() => {
         if (this.currentTime < this.duration) {
-          this.currentTime += 0.1;
+          this.currentTime = Math.min(this.duration, this.currentTime + 0.1);
         } else {
-          this.currentTime = this.duration;
           this.isPlaying = false;
           this.stopAudioTimer();
         }
@@ -180,15 +208,22 @@ export default {
 
     /* ---------- Submit ---------- */
     submit() {
+      // Recompute accuracy from final text (character-level)
+      let correct = 0, incorrect = 0;
+      for (let i = 0; i < this.typedText.length; i++) {
+        if (this.typedText[i] === this.referenceText[i]) correct++;
+        else incorrect++;
+      }
+
       const elapsedSec = this.startedAt ? Math.max(1, Math.round((Date.now() - this.startedAt) / 1000)) : 60;
       const wordsTyped = this.typedText.trim().split(/\s+/).filter(Boolean).length || 0;
       const wpm = Math.round((wordsTyped / elapsedSec) * 60);
       const totalChars = this.typedText.length;
-      const accuracy = totalChars ? Math.round((this.correct / totalChars) * 100) : 0;
+      const accuracy = totalChars ? Math.round((correct / totalChars) * 100) : 0;
 
       this.$router.push({
         path: "/results",
-        query: { wpm, accuracy, time: elapsedSec, correct: this.correct, incorrect: this.incorrect, backspaces: 0 }
+        query: { wpm, accuracy, time: elapsedSec, correct, incorrect, backspaces: 0 }
       });
     },
 
@@ -238,8 +273,8 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 50px;            /* original spacing */
-  margin-top: 100px;    /* original spacing */
+  gap: 50px;
+  margin-top: 100px;
 }
 
 /* Title row (kept) */
@@ -247,11 +282,11 @@ export default {
   width: 70%;
   display: flex;
   align-items: center;
-  gap: 15px;            /* original */
+  gap: 15px;
   justify-content: flex-start;
 }
 .customize-btn { color:#fff; background:#004aad; padding:6px 12px; }
-.time-text { font-weight:500; } /* original weight */
+.time-text { font-weight:500; }
 
 /* Audio controls */
 .audio-row {
@@ -285,26 +320,30 @@ export default {
 .seekbar-fill { position: absolute; left:0; top:0; bottom:0; background:#2e55a2; border-radius:999px; }
 .seekbar-knob { position:absolute; top:50%; width:12px; height:12px; border-radius:50%; background:#fff; border:2px solid #2e55a2; transform: translateY(-50%); }
 
-/* Sheet – keep ORIGINAL font size & weight */
+/* Typing sheet – ORIGINAL font size & weight retained */
 .sheet {
   width: 70%;
   min-height: 260px;
-  padding: 20px;                 /* original padding */
+  padding: 20px;
   background: #ffffff;
-  border: 1px solid #ddd;        /* original border color */
-  border-radius: 10px;           /* original radius */
-  box-shadow: 0px 2px 10px rgba(0,0,0,0.05);  /* original shadow */
-  text-align: justify;           /* original alignment */
-  line-height: 1.5;              /* original line-height */
-  font-size: 28px;               /* ORIGINAL font-size */
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0px 2px 10px rgba(0,0,0,0.05);
+  text-align: justify;
+  line-height: 1.5;
+  font-size: 28px;          /* original */
+  white-space: pre-wrap;     /* preserve typed spaces/newlines */
   user-select: none;
   outline: none;
   cursor: text;
-  color: #333;                   /* original text color */
+  color: #333;
 }
 
-/* Typing feedback – original colors */
-.pending { color: #bbb; }
+/* Non-breaking spaces for visibility */
+.space { white-space: pre; }
+
+/* Word-level feedback */
+.pending-word { color: #9aa3af; }
 .correct { color: #000; }
 .incorrect { color: #d93025; }
 
@@ -331,7 +370,7 @@ export default {
   color: white;
   border: none;
   padding: 8px 22px;
-    border-radius: 6px;
+  border-radius: 6px;
   font-weight: 500;
   cursor: pointer;
 }

@@ -208,7 +208,7 @@ export default {
       this.closeReauthModal();
     },
     logoutUser() {
-      alert("You have been logged out!");
+      // alert("You have been logged out!");
       this.$router.push("/"); // Redirect to login or home page
     },
     goToSettings() {
