@@ -10,24 +10,9 @@
         <div class="progress-circle"> 
           <span class="progress-number">5</span> 
         </div> 
-        <img 
-          src="@/assets/settings.png" 
-          alt="Settings" 
-          class="icon-img" 
-          @click="goToSettings" 
-        /> 
-        <img 
-          src="@/assets/highscore.png" 
-          alt="Highscore" 
-          class="icon-img" 
-          @click="goToHighscore" 
-        /> 
-        <img 
-          src="@/assets/about.png" 
-          alt="About" 
-          class="icon-img" 
-          @click="goToAbout" 
-        /> 
+        <img src="@/assets/settings.png" alt="Settings" class="icon-img" @click="goToSettings" /> 
+        <img src="@/assets/highscore.png" alt="Highscore" class="icon-img" @click="goToHighscore" /> 
+        <img src="@/assets/about.png" alt="About" class="icon-img" @click="goToAbout" /> 
       </div> 
     </header> 
 
@@ -45,17 +30,13 @@
             :class="{ active: keys.numbers }" 
             :disabled="disableKeys" 
             @click="toggleKey('numbers')" 
-          > 
-            Numbers 
-          </button> 
+          >Numbers</button> 
           <button 
             class="pill" 
             :class="{ active: keys.punctuation }" 
             :disabled="disableKeys" 
             @click="toggleKey('punctuation')" 
-          > 
-            Punctuation 
-          </button> 
+          >Punctuation</button> 
         </div> 
       </section> 
 
@@ -63,21 +44,8 @@
       <section class="group"> 
         <div class="group-title">Mode</div> 
         <div class="group-row wrap"> 
-          <button 
-            class="pill" 
-            :class="{ active: mode === 'words' }" 
-            @click="selectMode('words')" 
-          > 
-            Words 
-          </button> 
-
-          <button 
-            class="pill" 
-            :class="{ active: mode === 'time' }" 
-            @click="selectMode('time')" 
-          > 
-            Time 
-          </button> 
+          <button class="pill" :class="{ active: mode === 'words' }" @click="selectMode('words')">Words</button> 
+          <button class="pill" :class="{ active: mode === 'time' }" @click="selectMode('time')">Time</button> 
 
           <!-- Clinical scenarios --> 
           <div class="dropdown-wrapper"> 
@@ -89,74 +57,48 @@
               {{ selectedClinical ? selectedClinical : 'Clinical scenarios' }} 
               <span class="caret">▾</span> 
             </button> 
-            <div 
-              v-if="showClinical" 
-              class="dropdown" 
-              @mouseleave="showClinical = false" 
-            > 
+            <div v-if="showClinical" class="dropdown" @mouseleave="showClinical = false"> 
               <div 
                 v-for="opt in clinicalOptions" 
                 :key="opt" 
                 class="dropdown-item" 
                 :class="{ selected: selectedClinical === opt }" 
                 @click="selectClinical(opt)" 
-              > 
-                {{ opt }} 
-              </div> 
+              >{{ opt }}</div> 
             </div> 
           </div> 
 
           <!-- Body system --> 
           <div class="dropdown-wrapper"> 
-            <button 
-              class="pill with-caret" 
-              :class="{ active: mode === 'body' }" 
-              @click="toggleDropdown('body')" 
-            > 
+            <button class="pill with-caret" :class="{ active: mode === 'body' }" @click="toggleDropdown('body')"> 
               {{ selectedBody ? selectedBody : 'Body-system' }} 
               <span class="caret">▾</span> 
             </button> 
-            <div 
-              v-if="showBody" 
-              class="dropdown" 
-              @mouseleave="showBody = false" 
-            > 
+            <div v-if="showBody" class="dropdown" @mouseleave="showBody = false"> 
               <div 
                 v-for="opt in bodySystemOptions" 
                 :key="opt" 
                 class="dropdown-item" 
                 :class="{ selected: selectedBody === opt }" 
                 @click="selectBody(opt)" 
-              > 
-                {{ opt }} 
-              </div> 
+              >{{ opt }}</div> 
             </div> 
           </div> 
 
           <!-- Documentation --> 
           <div class="dropdown-wrapper"> 
-            <button 
-              class="pill with-caret" 
-              :class="{ active: mode === 'documentation' }" 
-              @click="toggleDropdown('documentation')" 
-            > 
+            <button class="pill with-caret" :class="{ active: mode === 'documentation' }" @click="toggleDropdown('documentation')"> 
               {{ selectedDocumentation ? selectedDocumentation : 'Documentation' }} 
               <span class="caret">▾</span> 
             </button> 
-            <div 
-              v-if="showDocumentation" 
-              class="dropdown" 
-              @mouseleave="showDocumentation = false" 
-            > 
+            <div v-if="showDocumentation" class="dropdown" @mouseleave="showDocumentation = false"> 
               <div 
                 v-for="opt in documentationOptions" 
                 :key="opt" 
                 class="dropdown-item" 
                 :class="{ selected: selectedDocumentation === opt }" 
                 @click="selectDocumentation(opt)" 
-              > 
-                {{ opt }} 
-              </div> 
+              >{{ opt }}</div> 
             </div> 
           </div> 
         </div> 
@@ -166,42 +108,13 @@
       <section class="group"> 
         <div class="group-title">number of words</div> 
         <div class="group-row wrap"> 
-          <button 
-            class="pill" 
-            :class="{ active: wordsSelection === 15 }" 
-            :disabled="disableWordsGroup" 
-            @click="selectWords(15)" 
-          > 
-            15 
-          </button> 
-          <button 
-            class="pill" 
-            :class="{ active: wordsSelection === 30 }" 
-            :disabled="disableWordsGroup" 
-            @click="selectWords(30)" 
-          > 
-            30 
-          </button> 
-
-          <button 
-            class="pill" 
-            :class="{ active: wordsSelection === 60 }" 
-            :disabled="disableWordsGroup" 
-            @click="selectWords(60)" 
-          > 
-            60 
-          </button> 
+          <button class="pill" :class="{ active: wordsSelection === 15 }" :disabled="disableWordsGroup" @click="selectWords(15)">15</button> 
+          <button class="pill" :class="{ active: wordsSelection === 30 }" :disabled="disableWordsGroup" @click="selectWords(30)">30</button> 
+          <button class="pill" :class="{ active: wordsSelection === 60 }" :disabled="disableWordsGroup" @click="selectWords(60)">60</button> 
 
           <!-- Custom words input --> 
           <div class="custom-time-wrapper"> 
-            <button 
-              class="pill" 
-              :class="{ active: wordsSelection === 'custom' }" 
-              :disabled="disableWordsGroup" 
-              @click="toggleWordsCustom" 
-            > 
-              custom 
-            </button> 
+            <button class="pill" :class="{ active: wordsSelection === 'custom' }" :disabled="disableWordsGroup" @click="toggleWordsCustom">custom</button> 
             <input 
               v-if="showWordsCustom" 
               type="number" 
@@ -219,42 +132,13 @@
       <section class="group"> 
         <div class="group-title">time duration</div> 
         <div class="group-row wrap"> 
-          <button 
-            class="pill" 
-            :class="{ active: timeSelection === 15 }" 
-            :disabled="disableTimeGroup" 
-            @click="selectTime(15)" 
-          > 
-            15 
-          </button> 
-          <button 
-            class="pill" 
-            :class="{ active: timeSelection === 30 }" 
-            :disabled="disableTimeGroup" 
-            @click="selectTime(30)" 
-          > 
-            30 
-          </button> 
-
-          <button 
-            class="pill" 
-            :class="{ active: timeSelection === 60 }" 
-            :disabled="disableTimeGroup" 
-            @click="selectTime(60)" 
-          > 
-            60 
-          </button> 
+          <button class="pill" :class="{ active: timeSelection === 15 }" :disabled="disableTimeGroup" @click="selectTime(15)">15</button> 
+          <button class="pill" :class="{ active: timeSelection === 30 }" :disabled="disableTimeGroup" @click="selectTime(30)">30</button> 
+          <button class="pill" :class="{ active: timeSelection === 60 }" :disabled="disableTimeGroup" @click="selectTime(60)">60</button> 
 
           <!-- Custom time input --> 
           <div class="custom-time-wrapper"> 
-            <button 
-              class="pill" 
-              :class="{ active: timeSelection === 'custom' }" 
-              :disabled="disableTimeGroup" 
-              @click="toggleTimeCustom" 
-            > 
-              custom 
-            </button> 
+            <button class="pill" :class="{ active: timeSelection === 'custom' }" :disabled="disableTimeGroup" @click="toggleTimeCustom">custom</button> 
             <input 
               v-if="showTimeCustom" 
               type="number" 
@@ -274,13 +158,7 @@
       <!-- Footer actions --> 
       <div class="footer-actions"> 
         <button class="secondary-btn" @click="resetAll">Reset</button> 
-        <button 
-          class="primary-btn" 
-          :disabled="!isFormValid" 
-          @click="done" 
-        > 
-          Done 
-        </button> 
+        <button class="primary-btn" :disabled="!isFormValid" @click="done">Done</button> 
       </div> 
     </div> 
   </div> 
@@ -293,23 +171,13 @@ export default {
     return { 
       username: "GwenStacy", 
 
-      keys: { 
-        numbers: false, 
-        punctuation: false, 
-      }, 
+      keys: { numbers: false, punctuation: false }, 
 
       mode: null, 
-      clinicalOptions: [ 
-        "Diagnosis", 
-        "Doctor’s Prescription", 
-        "Patient Interview", 
-      ], 
-      bodySystemOptions: [ 
-        "Nervous System", 
-        "Circulatory System", 
-        "Respiratory System", 
-      ], 
+      clinicalOptions: ["Diagnosis", "Doctor’s Prescription", "Patient Interview"], 
+      bodySystemOptions: ["Nervous System", "Circulatory System", "Respiratory System"], 
       documentationOptions: ["Nursing Notes", "Discharge Instructions"], 
+
       selectedClinical: null, 
       selectedBody: null, 
       selectedDocumentation: null, 
@@ -331,51 +199,51 @@ export default {
     }; 
   }, 
   computed: { 
+    // Keys disabled in non-basic modes (unchanged)
     disableKeys() { 
-      return ( 
-        this.mode === "clinical" || 
-        this.mode === "body" || 
-        this.mode === "documentation" 
-      ); 
+      return this.mode === "clinical" || this.mode === "body" || this.mode === "documentation"; 
     }, 
-    // Disable/enable groups based on mode
+    // Words group only active in Words mode
     disableWordsGroup() { 
       return this.mode !== "words"; 
     }, 
+    // >>> Time pills are disabled in Words mode AND in Clinical scenarios
     disableTimeGroup() { 
-      return this.mode === "words"; 
+      return this.mode === "words" || this.mode === "clinical"; 
     }, 
+
+    // Validation
     isFormValid() { 
-      const keysSelected = 
-        this.keys.numbers || this.keys.punctuation || this.disableKeys; 
+      const keysSelected = this.keys.numbers || this.keys.punctuation || this.disableKeys; 
 
       const modeSelected = 
-        this.mode && 
-        (this.mode === "words" || 
-          this.mode === "time" || 
-          (this.mode === "clinical" && this.selectedClinical) || 
-          (this.mode === "body" && this.selectedBody) || 
-          (this.mode === "documentation" && this.selectedDocumentation)); 
+        this.mode && (
+          this.mode === "words" ||
+          this.mode === "time" ||
+          (this.mode === "clinical" && this.selectedClinical) ||
+          (this.mode === "body" && this.selectedBody) ||
+          (this.mode === "documentation" && this.selectedDocumentation)
+        ); 
 
-      // Validation per active mode
       let targetValid = false;
 
       if (this.mode === "words") {
-        // Allow preset 15/30/60 OR custom >= 61
         targetValid = 
           this.wordsSelection === 15 ||
           this.wordsSelection === 30 ||
           this.wordsSelection === 60 ||
           (this.wordsSelection === "custom" && Number(this.wordsCustom) >= 61);
       } else if (this.mode === "time") {
-        // Allow preset 15/30/60 OR custom >= 2
         targetValid =
           this.timeSelection === 15 ||
           this.timeSelection === 30 ||
           this.timeSelection === 60 ||
           (this.timeSelection === "custom" && Number(this.timeCustom) >= 2);
-      } else if (this.mode === "clinical" || this.mode === "body" || this.mode === "documentation") {
-        // Require time selection/preset or custom >=2
+      } else if (this.mode === "clinical") {
+        // >>> New: selecting a clinical scenario alone is enough
+        targetValid = !!this.selectedClinical;
+      } else if (this.mode === "body" || this.mode === "documentation") {
+        // unchanged: require a time target for these modes
         targetValid =
           this.timeSelection === 15 ||
           this.timeSelection === 30 ||
@@ -398,14 +266,10 @@ export default {
     timeSelection() { this.validateTime(true); },
   },
   methods: { 
-    // NEW: go back to the previous page for the X button
+    // Back behavior for X button
     goBack() {
-      if (window.history.length > 1) {
-        this.$router.back();
-      } else {
-        // fallback if no history (e.g., direct load)
-        this.$router.push("/loggedin");
-      }
+      if (window.history.length > 1) this.$router.back();
+      else this.$router.push("/loggedin");
     },
 
     goToSettings() { this.$router.push("/settings"); }, 
@@ -425,22 +289,39 @@ export default {
       this.validateWords(true);
       this.validateTime(true);
     }, 
+
     toggleDropdown(which) { 
       this.showClinical = which === "clinical" ? !this.showClinical : false; 
       this.showBody = which === "body" ? !this.showBody : false; 
       this.showDocumentation = which === "documentation" ? !this.showDocumentation : false; 
+
+      // Set mode to which dropdown is opened
       this.mode = which; 
+
+      // If entering Clinical, clear/ignore any time settings
+      if (which === "clinical") {
+        this.timeSelection = null;
+        this.timeCustom = "";
+        this.showTimeCustom = false;
+      }
+
       this.errorMessage = "";
       this.validateWords(true);
       this.validateTime(true);
     }, 
+
     selectClinical(opt) { 
       this.selectedClinical = opt; 
       this.mode = "clinical"; 
       this.showClinical = false; 
+      // Clear any time selections (not needed in Clinical)
+      this.timeSelection = null;
+      this.timeCustom = "";
+      this.showTimeCustom = false;
       this.errorMessage = "";
-      this.validateTime(true);
+      // No time validation for clinical
     }, 
+
     selectBody(opt) { 
       this.selectedBody = opt; 
       this.mode = "body"; 
@@ -448,6 +329,7 @@ export default {
       this.errorMessage = "";
       this.validateTime(true);
     }, 
+
     selectDocumentation(opt) { 
       this.selectedDocumentation = opt; 
       this.mode = "documentation"; 
@@ -468,7 +350,7 @@ export default {
       if (this.disableWordsGroup) return; 
       this.wordsSelection = "custom"; 
       this.showWordsCustom = !this.showWordsCustom; 
-      if (!this.showWordsCustom) { this.wordsCustom = ""; } 
+      if (!this.showWordsCustom) this.wordsCustom = ""; 
       this.validateWords(true);
     }, 
     validateWords(clearWhenEmpty = false) {
@@ -478,15 +360,10 @@ export default {
         return;
       }
       const n = Number(this.wordsCustom);
-      if (!this.wordsCustom && clearWhenEmpty) {
-        this.errorMessage = "";
-        return;
-      }
-      if (!Number.isFinite(n) || n < 61) {
-        this.errorMessage = "Invalid input. Please input numbers above 60.";
-      } else {
-        this.errorMessage = "";
-      }
+      if (!this.wordsCustom && clearWhenEmpty) { this.errorMessage = ""; return; }
+      this.errorMessage = (!Number.isFinite(n) || n < 61)
+        ? "Invalid input. Please input numbers above 60."
+        : "";
     },
 
     // --- Time duration handlers ---
@@ -501,11 +378,12 @@ export default {
       if (this.disableTimeGroup) return; 
       this.timeSelection = "custom"; 
       this.showTimeCustom = !this.showTimeCustom; 
-      if (!this.showTimeCustom) { this.timeCustom = ""; } 
+      if (!this.showTimeCustom) this.timeCustom = ""; 
       this.validateTime(true);
     }, 
     validateTime(clearWhenEmpty = false) {
-      const shouldValidate = (this.mode === "time") || (this.mode === "clinical") || (this.mode === "body") || (this.mode === "documentation");
+      // No time validation in Clinical (it's disabled & ignored)
+      const shouldValidate = this.mode === "time" || this.mode === "body" || this.mode === "documentation";
       if (!shouldValidate) return;
 
       if (this.timeSelection !== "custom" || !this.showTimeCustom) {
@@ -513,15 +391,10 @@ export default {
         return;
       }
       const n = Number(this.timeCustom);
-      if (!this.timeCustom && clearWhenEmpty) {
-        this.errorMessage = "";
-        return;
-      }
-      if (!Number.isFinite(n) || n < 2) {
-        this.errorMessage = "Invalid input. Please input the number 2 and above.";
-      } else {
-        this.errorMessage = "";
-      }
+      if (!this.timeCustom && clearWhenEmpty) { this.errorMessage = ""; return; }
+      this.errorMessage = (!Number.isFinite(n) || n < 2)
+        ? "Invalid input. Please input the number 2 and above."
+        : "";
     },
 
     // --- route decision helper ---
@@ -671,10 +544,7 @@ export default {
   cursor: pointer; 
   line-height: 1; 
 } 
-
-.close-btn:hover { 
-  color: #004aad; 
-} 
+.close-btn:hover { color: #004aad; } 
 
 .group { 
   background: #ffffff; 
@@ -696,10 +566,7 @@ export default {
   align-items: center; 
   gap: 14px; 
 } 
-
-.group-row.wrap { 
-  flex-wrap: wrap; 
-} 
+.group-row.wrap { flex-wrap: wrap; } 
 
 .pill { 
   appearance: none; 
@@ -714,58 +581,18 @@ export default {
   min-width: 96px; 
   text-align: center; 
 } 
+.pill:hover { filter: brightness(0.97); } 
+.pill.active { background: #004aad; color: #ffffff; border-color: #004aad; } 
+.pill:disabled { background: #e9edf5; color: #a0aec0; cursor: not-allowed; } 
 
-.pill:hover { 
-  filter: brightness(0.97); 
-} 
+.pill.with-caret { display: inline-flex; align-items: center; justify-content: center; gap: 8px; } 
+.caret { font-size: 12px; opacity: 0.9; } 
 
-.pill.active { 
-  background: #004aad; 
-  color: #ffffff; 
-  border-color: #004aad; 
-} 
+.custom-time-wrapper { display: flex; align-items: center; gap: 10px; } 
+.custom-input { width: 90px; padding: 10px; border: 1px solid #d8deeb; border-radius: 6px; font-size: 14px; outline: none; } 
+.custom-input:focus { border-color: #2e55a2; } 
 
-.pill:disabled { 
-  background: #e9edf5; 
-  color: #a0aec0; 
-  cursor: not-allowed; 
-} 
-
-.pill.with-caret { 
-  display: inline-flex; 
-  align-items: center; 
-  justify-content: center; 
-  gap: 8px; 
-} 
-
-.caret { 
-  font-size: 12px; 
-  opacity: 0.9; 
-} 
-
-.custom-time-wrapper { 
-  display: flex; 
-  align-items: center; 
-  gap: 10px; 
-} 
-
-.custom-input { 
-  width: 90px; 
-  padding: 10px; 
-  border: 1px solid #d8deeb; 
-  border-radius: 6px; 
-  font-size: 14px; 
-  outline: none; 
-} 
-
-.custom-input:focus { 
-  border-color: #2e55a2; 
-} 
-
-.dropdown-wrapper { 
-  position: relative; 
-} 
-
+.dropdown-wrapper { position: relative; } 
 .dropdown { 
   position: absolute; 
   top: calc(100% + 8px); 
@@ -778,33 +605,13 @@ export default {
   z-index: 10; 
   padding: 8px; 
 } 
+.dropdown-item { padding: 10px 12px; border-radius: 8px; cursor: pointer; font-size: 14px; color: #1f2a44; } 
+.dropdown-item:hover { background: #f2f6ff; } 
+.dropdown-item.selected { background: #e7eefc; color: #004aad; } 
 
-.dropdown-item { 
-  padding: 10px 12px; 
-  border-radius: 8px; 
-  cursor: pointer; 
-  font-size: 14px; 
-  color: #1f2a44; 
-} 
+.footer-actions { display: flex; justify-content: flex-end; gap: 16px; margin-top: 28px; } 
 
-.dropdown-item:hover { 
-  background: #f2f6ff; 
-} 
-
-.dropdown-item.selected { 
-  background: #e7eefc; 
-  color: #2e55a2; 
-} 
-
-.footer-actions { 
-  display: flex; 
-  justify-content: flex-end; 
-  gap: 16px; 
-  margin-top: 28px; 
-} 
-
-.primary-btn, 
-.secondary-btn { 
+.primary-btn, .secondary-btn { 
   border: none; 
   border-radius: 10px; 
   font-weight: 500; 
@@ -813,39 +620,12 @@ export default {
   padding: 10px 25px; 
   transition: transform 0.05s ease, filter 0.1s ease; 
 } 
+.primary-btn { background: #004aad; color: #ffffff; } 
+.primary-btn:disabled { background: #b0c3e1; cursor: not-allowed; } 
+.primary-btn:active, .secondary-btn:active { transform: translateY(1px); } 
+.secondary-btn { background: #eef2f9; color: #274472; } 
+.secondary-btn:hover { filter: brightness(0.98); } 
+.primary-btn:hover { filter: brightness(0.98); } 
 
-.primary-btn { 
-  background: #2e55a2; 
-  color: #ffffff; 
-} 
-
-.primary-btn:disabled { 
-  background: #b0c3e1; 
-  cursor: not-allowed; 
-} 
-
-.primary-btn:active, 
-.secondary-btn:active { 
-  transform: translateY(1px); 
-} 
-
-.secondary-btn { 
-  background: #eef2f9; 
-  color: #274472; 
-} 
-
-.secondary-btn:hover { 
-  filter: brightness(0.98); 
-} 
-
-.primary-btn:hover { 
-  filter: brightness(0.98); 
-} 
-
-.error-message { 
-  color: #d93025; 
-  font-size: 14px; 
-  margin: 10px 0; 
-  text-align: right; 
-} 
+.error-message { color: #d93025; font-size: 14px; margin: 10px 0; text-align: right; } 
 </style>
