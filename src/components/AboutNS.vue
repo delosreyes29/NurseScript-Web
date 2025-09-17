@@ -6,33 +6,44 @@
         <span class="logo" @click="goToHome" style="cursor: pointer;">NurseScripts</span>
       </div>
       <div class="right-section">
-        <!-- Username -->
-        <a @click="$router.push('/user')" style="cursor: pointer; text-decoration: none; color: inherit;">
+        <!-- Username (tooltip: User page) -->
+        <a
+          @click="$router.push('/user')"
+          style="cursor: pointer; text-decoration: none; color: inherit;"
+          title="User page"
+          aria-label="User page"
+        >
           {{ username }}
         </a>
 
         <!-- Progress Circle -->
-        <div class="progress-circle">
+        <div class="progress-circle" title="Progress" aria-label="Progress">
           <span class="progress-number">5</span>
         </div>
 
-        <!-- Icons -->
+        <!-- Icons with hover tooltips -->
         <img
           src="@/assets/settings.png"
           alt="Settings"
           class="icon-img"
+          title="Settings"
+          aria-label="Settings"
           @click="goToSettings"
         />
         <img
           src="@/assets/highscore.png"
           alt="Highscore"
           class="icon-img"
+          title="Highscore"
+          aria-label="Highscore"
           @click="goToHighscore"
         />
         <img
           src="@/assets/about.png"
           alt="About"
           class="icon-img"
+          title="About"
+          aria-label="About"
           @click="goToAbout"
         />
       </div>

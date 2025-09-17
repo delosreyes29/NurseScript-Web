@@ -3,29 +3,47 @@
     <!-- Top Bar (copied style/behavior from other pages) -->
     <header class="top-bar">
       <div class="left-section">
-        <span class="logo" @click="goToLoggedIn">NurseScripts</span>
+        <span class="logo" @click="goToHome" style="cursor: pointer;">NurseScripts</span>
       </div>
       <div class="right-section">
-        <span class="username" @click="goToUserPage">{{ username }}</span>
-        <div class="progress-circle">
+        <!-- Username (tooltip: User page) -->
+        <a
+          @click="$router.push('/user')"
+          style="cursor: pointer; text-decoration: none; color: inherit;"
+          title="User page"
+          aria-label="User page"
+        >
+          {{ username }}
+        </a>
+
+        <!-- Progress Circle -->
+        <div class="progress-circle" title="Progress" aria-label="Progress">
           <span class="progress-number">5</span>
         </div>
+
+        <!-- Icons with hover tooltips -->
         <img
           src="@/assets/settings.png"
           alt="Settings"
           class="icon-img"
+          title="Settings"
+          aria-label="Settings"
           @click="goToSettings"
         />
         <img
           src="@/assets/highscore.png"
           alt="Highscore"
           class="icon-img"
+          title="Highscore"
+          aria-label="Highscore"
           @click="goToHighscore"
         />
         <img
           src="@/assets/about.png"
           alt="About"
           class="icon-img"
+          title="About"
+          aria-label="About"
           @click="goToAbout"
         />
       </div>

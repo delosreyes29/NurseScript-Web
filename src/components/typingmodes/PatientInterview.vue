@@ -6,13 +6,46 @@
         <span class="logo" @click="goToHome" style="cursor: pointer;">NurseScripts</span>
       </div>
       <div class="right-section">
-        <a @click="$router.push('/user')" style="cursor: pointer; text-decoration: none; color: inherit;">
-          GwenStacy
+        <!-- Username (tooltip: User page) -->
+        <a
+          @click="$router.push('/user')"
+          style="cursor: pointer; text-decoration: none; color: inherit;"
+          title="User page"
+          aria-label="User page"
+        >
+          {{ username }}
         </a>
-        <div class="progress-circle"><span class="progress-number">5</span></div>
-        <img src="@/assets/settings.png" alt="Settings" class="icon-img" @click="goToSettings" />
-        <img src="@/assets/highscore.png" alt="Highscore" class="icon-img" @click="goToHighscore" />
-        <img src="@/assets/about.png" alt="About" class="icon-img" @click="goToAbout" />
+
+        <!-- Progress Circle -->
+        <div class="progress-circle" title="Progress" aria-label="Progress">
+          <span class="progress-number">5</span>
+        </div>
+
+        <!-- Icons with hover tooltips -->
+        <img
+          src="@/assets/settings.png"
+          alt="Settings"
+          class="icon-img"
+          title="Settings"
+          aria-label="Settings"
+          @click="goToSettings"
+        />
+        <img
+          src="@/assets/highscore.png"
+          alt="Highscore"
+          class="icon-img"
+          title="Highscore"
+          aria-label="Highscore"
+          @click="goToHighscore"
+        />
+        <img
+          src="@/assets/about.png"
+          alt="About"
+          class="icon-img"
+          title="About"
+          aria-label="About"
+          @click="goToAbout"
+        />
       </div>
     </header>
 
@@ -246,9 +279,9 @@ export default {
   align-items: center;
   padding: 0 215px;
 }
-.logo { font-weight: bold; font-size: 25px; color: #004aad; cursor: pointer; }
+.logo { font-weight: bold; font-size: 25px; color: #2D539E; cursor: pointer; }
 .right-section { display: flex; align-items: center; gap: 15px; }
-.progress-circle { width: 30px; height: 30px; background:#004aad; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+.progress-circle { width: 30px; height: 30px; background:#2D539E; border-radius:50%; display:flex; align-items:center; justify-content:center; }
 .progress-number { color:#fff; font-weight: bold; font-size:15px; }
 .icon-img { height:30px; width:auto; cursor:pointer; }
 
@@ -270,7 +303,7 @@ export default {
   gap: 15px;
   justify-content: flex-start;
 }
-.customize-btn { color:#fff; background:#004aad; padding:6px 12px; }
+.customize-btn { color:#fff; background:#2D539E; padding:6px 12px; }
 .time-text { font-weight:500; }
 
 /* Audio controls */
@@ -289,13 +322,13 @@ export default {
 }
 .icon-play {
   width: 0; height: 0;
-  border-left: 12px solid #2e55a2;
+  border-left: 12px solid #2D539E;
   border-top: 7px solid transparent;
   border-bottom: 7px solid transparent;
 }
 .icon-pause { width: 12px; height: 14px; position: relative; }
 .icon-pause::before, .icon-pause::after {
-  content: ""; position: absolute; top: 0; width: 4px; height: 14px; background: #2e55a2;
+  content: ""; position: absolute; top: 0; width: 4px; height: 14px; background: #2D539E;
 }
 .icon-pause::before { left: 0; }
 .icon-pause::after  { right: 0; }
@@ -303,13 +336,13 @@ export default {
 /* Seekbar */
 .seekbar { position: relative; height: 10px; border-radius:999px; cursor: pointer; }
 .seekbar-track { position: absolute; inset: 0; background:#d9dfef; border-radius:999px; }
-.seekbar-fill { position: absolute; left:0; top:0; bottom:0; background:#2e55a2; border-radius:999px; }
+.seekbar-fill { position: absolute; left:0; top:0; bottom:0; background:#2D539E; border-radius:999px; }
 /* center the knob so at 0% it sits at the start */
 .seekbar-knob {
   position:absolute;
   top:50%;
   width:12px; height:12px; border-radius:50%;
-  background:#fff; border:2px solid #2e55a2;
+  background:#fff; border:2px solid #2D539E;
   transform: translate(-50%, -50%);
 }
 
@@ -360,7 +393,7 @@ export default {
   justify-content: flex-end;
 }
 .submit-btn {
-  background: #004aad;
+  background: #2D539E;
   color: white;
   border: none;
   padding: 8px 22px;

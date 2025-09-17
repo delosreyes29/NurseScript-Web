@@ -6,7 +6,6 @@ import LoggedIn from '@/components/LoggedIn.vue'
 import UserPage from '@/components/UserPage.vue'
 import Highscore from '@/components/Highscore.vue'
 import AboutNS from '@/components/AboutNS.vue'
-import AboutNSNoLog from '@/components/AboutNSNoLog.vue'
 import SettingsPage from '@/components/SettingsPage.vue'
 import LoginForm from '@/components/LoginForm.vue'
 import RegisterForm from '@/components/RegisterForm.vue'
@@ -31,7 +30,6 @@ const routes = [
   { path: '/user', name: 'UserPage', component: UserPage },
   { path: '/highscore', name: 'Highscore', component: Highscore },
   { path: '/aboutns', name: 'AboutNS', component: AboutNS },
-  { path: '/aboutnsnolog', name: 'AboutNSNoLog', component: AboutNSNoLog },
   { path: '/settings', name: 'SettingsPage', component: SettingsPage },
   { path: '/login', name: 'LoginForm', component: LoginForm },
   { path: '/register', name: 'RegisterForm', component: RegisterForm, alias: ['/registerform'] },

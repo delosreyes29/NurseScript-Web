@@ -78,14 +78,14 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding:  0px 215px;
+  padding:  0px 330px;
   box-shadow: none;
 }
 
 .logo {
   font-weight: bold;
   font-size: 25px;
-  color: #2D539E;
+  color: #004aad;
   cursor: pointer;
 }
 
@@ -97,7 +97,7 @@ export default {
 
 /* Log In button (copied from NotLoggedIn.vue) */
 .btn {
-  background: #2D539E;
+  background: #004aad;
   border: none;
   color: white;
   padding: 6px 12px;
@@ -128,7 +128,7 @@ export default {
 }
 
 .about-container h1 {
-  color: #2D539E;
+  color: #004aad;
   font-size: 28px;
   margin-bottom: 20px;
 }
